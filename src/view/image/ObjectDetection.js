@@ -1,9 +1,9 @@
 import React from "react";
 
 function ImageObjectDetection() {
-    return (
-        <div>Hello!</div>
-    )
+  return (
+    <div>Hello Image!</div>
+  )
 }
 
 export default ImageObjectDetection;
