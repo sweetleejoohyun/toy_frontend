@@ -1,6 +1,7 @@
 import React from 'react';
 import {StylesProvider, ThemeProvider} from '@material-ui/styles';
-import {createMuiTheme} from '@material-ui/core';
+// import {createMuiTheme} from '@material-ui/core';
+import { createTheme } from "@material-ui/core";
 
 function Theme(props) {
   const {children} = props;
@@ -25,8 +26,7 @@ function Theme(props) {
 
   };
 
-  const theme = createMuiTheme(muiTheme);
-
+  const theme = createTheme(muiTheme);
   return (
     <StylesProvider>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
