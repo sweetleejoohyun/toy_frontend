@@ -34,14 +34,10 @@ function Header() {
 
 const imageMenuItems = [
   {name: '객체검출'},
-  {name: '객체검출2'},
-  {name: '객체검출3'}
 ]
 
 const videoMenuItems = [
   {name: '객체검출'},
-  {name: '객체검출2'},
-  {name: '객체검출3'}
 ]
 
 const useStyles = makeStyles(theme => ({
@@ -53,17 +49,15 @@ const useStyles = makeStyles(theme => ({
   },
   menuArea:{
     display: "flex",
-
   },
   empty: {
-    width: theme.spacing(10)
+    width: theme.spacing(10),
   },
   menu: {
-    marginRight: theme.spacing(1),
+    width: theme.spacing(15),
   },
   out:{
     display: "flex",
-
   }
 }))
 
