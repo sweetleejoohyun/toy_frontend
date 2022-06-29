@@ -33,11 +33,13 @@ function Header() {
 }
 
 const imageMenuItems = [
-  {name: '객체검출'},
+  { name: '객체검출',
+    path: '/image/object-detection' },
 ]
 
 const videoMenuItems = [
-  {name: '객체검출'},
+  { name: '객체검출',
+    path: '/video/object-detection' },
 ]
 
 const useStyles = makeStyles(theme => ({
