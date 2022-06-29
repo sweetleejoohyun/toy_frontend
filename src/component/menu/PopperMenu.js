@@ -81,11 +81,12 @@ PopperMenu.propTypes = {
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
-    alignContent: "center",
-    minWidth: theme.spacing(3),
+    justifyContent: "center",
+    alignItems: "center",
     height: '100%'
   },
   button: {
+    width: '100px',
     color: theme.base.color,
     fontFamily: theme.base.fontFamily,
     fontSize: theme.spacing(3),
@@ -93,6 +94,7 @@ const useStyles = makeStyles(theme => ({
   },
   menuList: {
     backgroundColor: theme.base.headerColor,
+    width: theme.spacing(15)
   },
   menuItem: {
     color: theme.base.color,
