@@ -9,10 +9,13 @@ function Theme(props) {
   const base = {
     mainButtonColor: '#74BBE8FF',
     headerHeight: '7vh',
-    headerColor: '#b9d5e8',
+    baseBackgroundColor: '#b9d5e8',
+    // baseBackgroundColor: '#FFFFFFFF',
+    headerColor: '#74BBE8FF',
     footerHeight: '3vh',
-    footerColor: '#b9d5e8',
-    fontFamily: 'sans-serif',
+    footerColor: '#74BBE8FF',
+    // fontFamily: 'sans-serif',
+    fontfamily: 'Noto Sans KR',
     color: '#06063BFF'
   };
 
