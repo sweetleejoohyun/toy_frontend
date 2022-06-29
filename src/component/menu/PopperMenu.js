@@ -9,6 +9,8 @@ import {
   Popper
 } from "@material-ui/core";
 import PropTypes from 'prop-types';
+import { useHistory } from "react-router-dom";
+
 
 function PopperMenu(props) {
   const classes = useStyles()
@@ -16,25 +18,19 @@ function PopperMenu(props) {
 
   const [open, setOpen] = useState(false);
   const ref = useRef();
-
-  // const prevOpen = useRef(open);
-  // useEffect(() => {
-  //     if (prevOpen.current === true && open === false) {
-  //         ref.current.focus();
-  //     }
-  //
-  //     prevOpen.current = open;
-  // }, [open]);
+  const history = useHistory();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
 
   const handleClose = () => {
-    // if (ref.current && ref.current.contains(event.target)) {
-    //     return;
-    // }
     setOpen(false);
+  }
+
+  const handleMenuItem = (path) => () => {
+    setOpen(false);
+    history.push(path)
   };
 
   return (
@@ -59,7 +55,7 @@ function PopperMenu(props) {
                     <MenuItem
                       className={classes.menuItem}
                       key={index}
-                      onClick={handleClose}>
+                      onClick={handleMenuItem(menuItem.path)}>
                       {menuItem.name}
                     </MenuItem>
                   ))}
@@ -98,6 +94,7 @@ const useStyles = makeStyles(theme => ({
   },
   menuItem: {
     color: theme.base.color,
+    justifyContent: "center"
   }
 }))
 
