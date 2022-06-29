@@ -9,3 +9,4 @@ export const imageExtension = '.jpg, .jpeg, .png';
 export const videoExtension = '.mp4, .avi, .av1';
 
 export const messageNotImage = 'jpg, jpeg, png 파일이 아닙니다.';
+export const messageNotVideo = 'mp4, avi, av1 파일이 아닙니다.';
