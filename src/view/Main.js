@@ -47,7 +47,7 @@ function Main(){
 
 const useStyles = makeStyles(theme => ({
   root:{
-    backgroundColor: theme.base.headerColor,
+    backgroundColor: theme.base.baseBackgroundColor,
     height: '100vh',
   },
   box:{
