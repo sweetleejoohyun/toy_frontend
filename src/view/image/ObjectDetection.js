@@ -1,67 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  Button,
-  Collapse,
   makeStyles,
-  Typography
 } from "@material-ui/core";
-import { FolderOpenOutlined } from "@material-ui/icons";
-import Alert from '@material-ui/lab/Alert';
 
-import {
-  imageExtension,
-  imageTitle,
-  messageNotImage,
-  objectDetectionTitle
-} from "../../utils/constant";
+import ImagePanel from "../../component/panel/ImagePanel";
+import ObjectPanel from "../../component/panel/ObjectPanel";
 
 
 function ImageObjectDetection() {
   const classes = useStyles();
-  const [openAlert, setOpenAlert] = useState(false);
-  const [selectedFile, setSelectedFile] = useState();
-
-  const onChangeFile = event => {
-    const file = event.target.files[0]
-    const extArr = imageExtension.split(',')
-    // check the extension
-    if (extArr.find(element => file.name.endsWith(element))) {
-      setSelectedFile(file);
-      setOpenAlert(false)
-    } else {
-      //event.target.value = '';
-      setOpenAlert(true)
-    }
-  };
 
   return (
     <div className={classes.root}>
-      <div>
-        <div>
-          <Typography className={classes.title}> {imageTitle}&nbsp;{objectDetectionTitle} </Typography>
-        </div>
-        <div className={classes.fileDiv}>
-          <Button className={classes.button} component="label">
-            <FolderOpenOutlined />
-            열기
-            <input
-              type="file"
-              onChange={onChangeFile}
-              style={{ display: 'none' }}
-              accept={imageExtension}
-            />
-          </Button>
-          <Collapse in={openAlert}>
-            <Alert severity="error">{messageNotImage}</Alert>
-          </Collapse>
-          { selectedFile? <Typography>{selectedFile.name}</Typography> : null }
-        </div>
-        <div>
-         이미지
-        </div>
+      <div className={classes.leftDiv}>
+        <ImagePanel />
       </div>
-      <div>
-        객체 목록
+      <div className={classes.rightDiv}>
+        <ObjectPanel />
       </div>
     </div>
   )
@@ -70,17 +25,16 @@ function ImageObjectDetection() {
 const useStyles = makeStyles(theme => ({
   root:{
     display: "flex",
+    width: '100%',
+    backgroundColor: theme.base.baseBackgroundColor,
   },
-  title:{
-    fontFamily: theme.base.fontFamily,
-    fontSize: theme.spacing(3),
+  leftDiv:{
+    width: '50%',
+    borderRight: '1px solid #74BBE8FF'
   },
-  button:{
-    fontFamily: theme.base.fontFamily,
-    fontSize: theme.spacing(3)
-  },
-  fileDiv:{
-    display: "flex"
+  rightDiv:{
+    width: '50%',
+    marginLeft: theme.spacing(6),
   }
 }));
 
