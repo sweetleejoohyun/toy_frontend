@@ -1,12 +1,17 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-import {getPath} from "../../utils/user";
-import defaultView from "../../utils/AppConfig"
+import {
+  getPath,
+  removePathSession
+} from "../../utils/user";
 
 
 // handle the private routes
 function PublicRoute({ component: Component, ...rest }) {
+  if (rest.location.pathname === '/') {
+    removePathSession();
+  }
   return (
     <Route
       {...rest}
@@ -15,7 +20,7 @@ function PublicRoute({ component: Component, ...rest }) {
           <Component {...props} />
         ) : (
           <Redirect
-            to={{ pathname: '/image/'+defaultView}}
+            to={{ pathname: rest.location.pathname}}
           />
         )
       }
