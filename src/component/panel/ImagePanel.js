@@ -107,6 +107,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "center",
     marginLeft: theme.spacing(1),
     marginTop: theme.spacing(2),
+    marginRight: theme.spacing(1),
     marginBottom: theme.spacing(2),
   },
   img:{
