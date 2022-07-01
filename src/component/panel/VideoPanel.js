@@ -17,6 +17,7 @@ import {
   messageNotVideo,
   objectDetectionTitle,
 } from "../../utils/constant";
+import VideoPlayer from "../player/VideoPlayer";
 
 
 function VideoPanel(){
@@ -60,13 +61,9 @@ function VideoPanel(){
         { selectedFile?
           <Typography className={classes.filenameTypo}>{selectedFile.name}</Typography> : null }
       </div>
-      <div className={classes.imgDiv}>
+      <div className={classes.videoDiv}>
         {selectedFile && (
-          <img
-            className={classes.img}
-            // src={process.env.PUBLIC_URL +'/images/grapefruit.jpg'}
-            src={URL.createObjectURL(selectedFile)}
-            alt={'image'}/>
+          <VideoPlayer />
         )}
       </div>
     </div>
@@ -108,17 +105,16 @@ const useStyles = makeStyles(theme => ({
     fontSize: theme.spacing(2),
     marginLeft: theme.spacing(1),
   },
-  imgDiv:{
+  videoDiv:{
     // width: '50vw',
     height: '75vh',
     display: 'flex',
     justifyContent: "center",
     marginLeft: theme.spacing(1),
     marginTop: theme.spacing(2),
+    marginRight: theme.spacing(1),
     marginBottom: theme.spacing(2),
   },
-  img:{
-  }
 }));
 
 export default VideoPanel;
