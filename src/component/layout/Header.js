@@ -2,7 +2,7 @@ import React from "react";
 import { Button, makeStyles } from "@material-ui/core";
 import PopperMenu from "../menu/PopperMenu";
 import { ExitToApp } from "@material-ui/icons";
-import { removePathSession } from "../../utils/user";
+import { removePathSession } from "../../common/User";
 
 function Header() {
   const classes = useStyles()

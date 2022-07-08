@@ -6,8 +6,8 @@ import {
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
-import { defaultView } from "../utils/AppConfig";
-import { setPathSession } from "../utils/user";
+import { defaultView } from "../common/AppConfig";
+import { setPathSession } from "../common/User";
 
 
 function Main(){

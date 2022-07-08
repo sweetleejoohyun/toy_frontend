@@ -2,7 +2,7 @@ import React, {useMemo} from "react";
 import {Route, Switch} from 'react-router-dom';
 import {makeStyles, Paper} from "@material-ui/core";
 
-import ROUTE from "../../utils/Route";
+import ROUTE from "../../common/Route";
 
 function Section() {
   const classes = useStyles();

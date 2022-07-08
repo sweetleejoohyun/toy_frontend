@@ -4,7 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 import {
   getPath,
   removePathSession
-} from "../../utils/user";
+} from "../../common/User";
 
 
 // handle the private routes

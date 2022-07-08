@@ -7,7 +7,7 @@ import Layout from "./component/layout/Layout";
 import Main from "./view/Main";
 import PrivateRoute from "./component/routes/PrivateRoute";
 import PublicRoute from "./component/routes/PublicRoute";
-import { getPath } from "./utils/user";
+import { getPath } from "./common/User";
 
 
 function App() {
