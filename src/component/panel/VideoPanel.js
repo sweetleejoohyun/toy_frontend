@@ -7,7 +7,6 @@ import {
 } from "@material-ui/core";
 import {
   FolderOpenOutlined,
-  Search
 } from "@material-ui/icons";
 import Alert from "@material-ui/lab/Alert";
 
@@ -15,8 +14,8 @@ import {
   videoExtension,
   videoTitle,
   messageNotVideo,
-  objectDetectionTitle,
-} from "../../utils/constant";
+  objectDetectionTitle, messageRestrictVideoSize,
+} from "../../common/Constant";
 import VideoPlayer from "../player/VideoPlayer";
 
 
@@ -33,7 +32,6 @@ function VideoPanel(){
       setSelectedFile(file);
       setOpenAlert(false)
     } else {
-      //event.target.value = '';
       setOpenAlert(true)
     }
   };
@@ -41,25 +39,29 @@ function VideoPanel(){
   return(
     <div className={classes.root}>
       <div className={classes.topDiv}>
-        <Search />
         <Typography className={classes.title}> {videoTitle}&nbsp;{objectDetectionTitle} </Typography>
       </div>
       <div className={classes.fileDiv}>
-        <Button className={classes.button} component="label">
-          <FolderOpenOutlined/>
-          <Typography className={classes.fileTypo}>{'파일열기'}</Typography>
-          <input
-            type="file"
-            onChange={onChangeFile}
-            style={{ display: 'none' }}
-            accept={videoExtension}
-          />
-        </Button>
-        <Collapse in={openAlert} style={!openAlert && {display: 'none'}}>
-          <Alert severity="error">{messageNotVideo}</Alert>
-        </Collapse>
-        { selectedFile?
-          <Typography className={classes.filenameTypo}>{selectedFile.name}</Typography> : null }
+        <div className={classes.fileTitle}>
+          <Button className={classes.button} component="label">
+            <FolderOpenOutlined/>
+            <Typography className={classes.fileTypo}>{'영상 열기'}</Typography>
+            <input
+              type="file"
+              onChange={onChangeFile}
+              style={{ display: 'none' }}
+              accept={videoExtension}
+            />
+          </Button>
+          <Collapse in={openAlert} style={!openAlert && {display: 'none'}}>
+            <Alert severity="error">{messageNotVideo}</Alert>
+          </Collapse>
+          { selectedFile?
+            <Typography className={classes.filenameTypo}>{selectedFile.name}</Typography> : null }
+        </div>
+        <div>
+          <Typography  className={classes.fileDesc}> { messageRestrictVideoSize }</Typography>
+        </div>
       </div>
       <div className={classes.videoDiv}>
         {selectedFile && (
@@ -83,12 +85,20 @@ const useStyles = makeStyles(theme => ({
   title:{
     fontFamily: theme.base.fontFamily,
     fontSize: theme.spacing(2.5),
+    fontWeight: "bold",
   },
   fileDiv:{
-    display: "flex",
+    display: "flow-root",
     alignItems: "center",
     marginTop: theme.spacing(2),
     marginLeft: theme.spacing(5),
+  },
+  fileTitle:{
+    display: "flex",
+  },
+  fileDesc:{
+    color: "red",
+    fontSize: theme.spacing(1.5),
   },
   button:{
     fontFamily: theme.base.fontFamily,
