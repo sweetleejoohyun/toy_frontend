@@ -1,6 +1,11 @@
-import React, {useState} from "react";
-import {Button, Collapse, makeStyles, Typography} from "@material-ui/core";
-import {FolderOpenOutlined, Search} from "@material-ui/icons";
+import React, { useState } from "react";
+import {
+  Button,
+  Collapse,
+  makeStyles,
+  Typography
+} from "@material-ui/core";
+import { FolderOpenOutlined } from "@material-ui/icons";
 import Alert from "@material-ui/lab/Alert";
 
 import {
@@ -8,7 +13,7 @@ import {
   imageTitle,
   messageNotImage,
   objectDetectionTitle
-} from "../../utils/constant";
+} from "../../common/Constant";
 
 
 function ImagePanel(){
@@ -24,7 +29,6 @@ function ImagePanel(){
       setSelectedFile(file);
       setOpenAlert(false)
     } else {
-      //event.target.value = '';
       setOpenAlert(true)
     }
   };
@@ -32,13 +36,12 @@ function ImagePanel(){
   return(
     <div className={classes.root}>
       <div className={classes.topDiv}>
-        <Search />
         <Typography className={classes.title}> {imageTitle}&nbsp;{objectDetectionTitle} </Typography>
       </div>
       <div className={classes.fileDiv}>
         <Button className={classes.button} component="label">
           <FolderOpenOutlined/>
-          <Typography className={classes.fileTypo}>{'파일열기'}</Typography>
+          <Typography className={classes.fileTypo}>{'이미지 열기'}</Typography>
           <input
             type="file"
             onChange={onChangeFile}
@@ -56,7 +59,6 @@ function ImagePanel(){
         {selectedFile && (
           <img
             className={classes.img}
-            // src={process.env.PUBLIC_URL +'/images/grapefruit.jpg'}
             src={URL.createObjectURL(selectedFile)}
             alt={'image'}/>
         )}
@@ -67,8 +69,6 @@ function ImagePanel(){
 
 
 const useStyles = makeStyles(theme => ({
-  root:{
-  },
   topDiv:{
     display: "flex",
     alignItems: "center",
@@ -78,6 +78,7 @@ const useStyles = makeStyles(theme => ({
   title:{
     fontFamily: theme.base.fontFamily,
     fontSize: theme.spacing(2.5),
+    fontWeight: "bold",
   },
   fileDiv:{
     display: "flex",
@@ -110,8 +111,6 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1),
     marginBottom: theme.spacing(2),
   },
-  img:{
-  }
 }));
 
 export default ImagePanel;
