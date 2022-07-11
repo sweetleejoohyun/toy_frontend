@@ -1,6 +1,6 @@
 const testConfig = {
   envName: 'develop',
-  apiRoot: 'http://127.0.0.1:5050/api',
+  apiRoot: 'http://127.0.0.1:5000/api',
 };
 
 const getConfig = () => {
