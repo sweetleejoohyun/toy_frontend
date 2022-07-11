@@ -7,23 +7,27 @@ function Theme(props) {
   const {children} = props;
 
   const base = {
-    mainButtonColor: '#74BBE8FF',
+    mainButtonColor: '#8b9dc3',
+    baseBackgroundColor: '#f0f2f5',
+
     headerHeight: '7vh',
-    baseBackgroundColor: '#b9d5e8',
-    // baseBackgroundColor: '#FFFFFFFF',
-    headerColor: '#74BBE8FF',
+    headerColor: '#8b9dc3',
+
     footerHeight: '3vh',
-    footerColor: '#74BBE8FF',
-    // fontFamily: 'sans-serif',
-    fontfamily: 'Noto Sans KR',
-    color: '#06063BFF'
+    footerColor: '#8b9dc3',
+
+    fontFamily: 'sans-serif',
+    fontColor: '#0D275DFF',
+
+    color: '#3b5998',
+    hoverButtonColor: '#c5cfe8',
   };
 
   const muiTheme = {
     base: base,
     palette: {
       background: {
-        color: '#FFFFFF',
+        color: '#f0f2f5',
       }
     },
 
