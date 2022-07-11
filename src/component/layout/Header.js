@@ -24,7 +24,7 @@ function Header() {
         </div>
       </div>
       <div className={classes.out}>
-        <Button onClick={handleOut}>
+        <Button className={classes.outButton} onClick={handleOut}>
           <ExitToApp />
         </Button>
       </div>
@@ -60,6 +60,9 @@ const useStyles = makeStyles(theme => ({
   },
   out:{
     display: "flex",
+  },
+  outButton:{
+    color: theme.base.fontColor
   }
 }))
 

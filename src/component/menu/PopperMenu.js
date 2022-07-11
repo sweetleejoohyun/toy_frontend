@@ -83,7 +83,7 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     width: '100px',
-    color: theme.base.color,
+    color: theme.base.fontColor,
     fontFamily: theme.base.fontFamily,
     fontSize: theme.spacing(3),
     fontWeight: "bolder"
@@ -93,7 +93,7 @@ const useStyles = makeStyles(theme => ({
     width: theme.spacing(15)
   },
   menuItem: {
-    color: theme.base.color,
+    color: theme.base.fontColor,
     justifyContent: "center"
   }
 }))

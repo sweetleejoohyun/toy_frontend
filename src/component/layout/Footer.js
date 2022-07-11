@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 
   },
   typography: {
-    color: theme.base.color,
+    color: theme.base.fontColor,
     fontSize: theme.spacing(2)
   }
 }))
