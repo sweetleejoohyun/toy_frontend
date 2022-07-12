@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   Collapse,
   makeStyles,
@@ -14,18 +14,22 @@ import {
   imageTitle,
   messageNotImage,
   objectDetectionTitle,
+  imageBaseSize
 } from "../../common/Constant";
 import OpenFileButton from "../button/OpenFileButton";
-import appConfig from "../../common/AppConfig";
+import appConfig, { getImage } from "../../common/AppConfig";
 import {onAxiosError} from "../../common/Error";
 
 
 function ImagePanel(){
   const classes = useStyles();
   const [openAlert, setOpenAlert] = useState(false);
-  const [selectedFile, setSelectedFile] = useState();
+  const [selectedFileName, setSelectedFileName] = useState('');
+  const [imagePath, setImagePath] = useState('');
   const [displayProgress, setDisplayProgress] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [imgWidth, setImgWidth] = useState(0)
+  const [imgHeight, setImgHeight] = useState(0)
 
   const onChangeFile = event => {
     const file = event.target.files[0];
@@ -35,7 +39,9 @@ function ImagePanel(){
       setOpenAlert(false)
       uploadImage(file)
     } else {
-      setSelectedFile()
+      setSelectedFileName('')
+      setImagePath('')
+      setProgress(0)
       setOpenAlert(true)
     }
   };
@@ -58,19 +64,26 @@ function ImagePanel(){
       })
       .then(response => {
         if (response.status === 200) {
-          console.log(response.data.message)
-          setSelectedFile(file);
+          setSelectedFileName(file.name);
+          setImagePath(response.data.path)
+          resizeImage(response.data.info)
         }
       })
       .catch(error => {
-        setSelectedFile()
+        setSelectedFileName('')
+        setImagePath('')
+        setProgress(0)
         onAxiosError(error);
-      })
-      .finally( () => {
-        // setDisplayProgress(false)
       })
   };
 
+  const resizeImage = (imageInfo) => {
+    const { height, width } = imageInfo;
+    const base = Math.max(width, height)
+    const ratio = imageBaseSize / base
+    setImgWidth(ratio * width)
+    setImgHeight(ratio * height)
+  }
 
   return(
     <div className={classes.root}>
@@ -83,8 +96,8 @@ function ImagePanel(){
             name={'이미지 열기'}
             onChangeFile={onChangeFile}
             accept={imageExtension}/>
-          { selectedFile?
-            <Typography className={classes.filenameTypo}>{selectedFile.name}</Typography> : null
+          { selectedFileName?
+            <Typography className={classes.filenameTypo}>{selectedFileName}</Typography> : null
           }
           { displayProgress?
             <div className={classes.progressDiv}>
@@ -108,14 +121,14 @@ function ImagePanel(){
         </div>
       </div>
       <div className={classes.imgDiv}>
-        {selectedFile && (
+        {imagePath && (
           <img
             className={classes.img}
-            src={URL.createObjectURL(selectedFile)}
+            style={{width: `${imgWidth}px`, height: `${imgHeight}px`}}
+            src={getImage(imagePath)}
             alt={'image'}/>
         )}
       </div>
-
     </div>
   )
 }
@@ -150,13 +163,12 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(1),
   },
   imgDiv:{
-    // width: '50vw',
+    width: '100%',
     height: '75vh',
     display: 'flex',
     justifyContent: "center",
-    marginLeft: theme.spacing(1),
+    alignItems: "center",
     marginTop: theme.spacing(2),
-    marginRight: theme.spacing(1),
     marginBottom: theme.spacing(2),
   },
   progressDiv:{
