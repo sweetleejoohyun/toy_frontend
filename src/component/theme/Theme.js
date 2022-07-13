@@ -1,36 +1,44 @@
 import React from 'react';
 import {StylesProvider, ThemeProvider} from '@material-ui/styles';
-import {createMuiTheme} from '@material-ui/core';
+// import {createMuiTheme} from '@material-ui/core';
+import { createTheme } from "@material-ui/core";
 
 function Theme(props) {
-    const {children} = props;
+  const {children} = props;
 
-    const base = {
-        headerHeight: '7vh',
-        headerColor: '#b9d5e8',
-        footerHeight: '3vh',
-        footerColor: '#b9d5e8',
-        fontFamily: 'sans-serif',
-        color: '#06063BFF'
-    };
+  const base = {
+    mainButtonColor: '#8b9dc3',
+    baseBackgroundColor: '#f0f2f5',
 
-    const muiTheme = {
-        base: base,
-        palette: {
-            background: {
-                color: '#FFFFFF',
-            }
-        },
+    headerHeight: '7vh',
+    headerColor: '#8b9dc3',
 
-    };
+    footerHeight: '3vh',
+    footerColor: '#8b9dc3',
 
-    const theme = createMuiTheme(muiTheme);
+    fontFamily: 'sans-serif',
+    fontColor: '#0D275DFF',
 
-    return (
-        <StylesProvider>
-            <ThemeProvider theme={theme}>{children}</ThemeProvider>
-        </StylesProvider>
-    );
+    color: '#3b5998',
+    hoverButtonColor: '#c5cfe8',
+  };
+
+  const muiTheme = {
+    base: base,
+    palette: {
+      background: {
+        color: '#f0f2f5',
+      }
+    },
+
+  };
+
+  const theme = createTheme(muiTheme);
+  return (
+    <StylesProvider>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </StylesProvider>
+  );
 }
 
 export default Theme;

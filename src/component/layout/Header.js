@@ -1,47 +1,69 @@
 import React from "react";
-import {makeStyles} from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
 import PopperMenu from "../menu/PopperMenu";
+import { ExitToApp } from "@material-ui/icons";
+import { removePathSession } from "../../common/User";
 
 function Header() {
-    const classes = useStyles()
+  const classes = useStyles()
 
-    return (
-        <div className={classes.root}>
-            <div className={classes.empty}></div>
-            <div className={classes.menu}>
-                <PopperMenu menu={'이미지'} menuItems={imageMenuItems}/>
-            </div>
-            <div className={classes.menu}>
-                <PopperMenu menu={'영상'} menuItems={videoMenuItems}/>
-            </div>
+  const handleOut = () => {
+    removePathSession()
+    window.location = '/';
+  }
+
+  return (
+    <div className={classes.root}>
+      <div className={classes.menuArea}>
+        <div className={classes.empty}></div>
+        <div className={classes.menu}>
+          <PopperMenu menu={'이미지'} menuItems={imageMenuItems}/>
         </div>
-    )
+        <div className={classes.menu}>
+          <PopperMenu menu={'영상'} menuItems={videoMenuItems}/>
+        </div>
+      </div>
+      <div className={classes.out}>
+        <Button className={classes.outButton} onClick={handleOut}>
+          <ExitToApp />
+        </Button>
+      </div>
+    </div>
+  )
 }
 
 const imageMenuItems = [
-    {name: '객체검출'},
-    {name: '객체검출2'},
-    {name: '객체검출3'}
+  { name: '객체검출',
+    path: '/image/object-detection' },
 ]
 
 const videoMenuItems = [
-    {name: '객체검출'},
-    {name: '객체검출2'},
-    {name: '객체검출3'}
+  { name: '객체검출',
+    path: '/video/object-detection' },
 ]
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        backgroundColor: theme.base.headerColor,
-        minHeight: theme.base.headerHeight,
-        display: "flex",
-    },
-    empty: {
-        width: theme.spacing(10)
-    },
-    menu: {
-        marginRight: theme.spacing(1),
-    }
+  root: {
+    backgroundColor: theme.base.headerColor,
+    minHeight: theme.base.headerHeight,
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  menuArea:{
+    display: "flex",
+  },
+  empty: {
+    width: theme.spacing(10),
+  },
+  menu: {
+    width: theme.spacing(15),
+  },
+  out:{
+    display: "flex",
+  },
+  outButton:{
+    color: theme.base.fontColor
+  }
 }))
 
 export default Header;
