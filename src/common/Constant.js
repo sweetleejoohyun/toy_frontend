@@ -11,3 +11,5 @@ export const messageNotVideo = 'mp4, avi, mkv, webm 파일이 아닙니다.';
 export const messageRestrictVideoSize = '영상의 크기는 2.0MB를 넘을 수 없습니다.';
 
 export const imageBaseSize = 700;
+
+export const objectDetectionModels = ['SsdMobilenetV2','FasterRcnnResnetV2'];
