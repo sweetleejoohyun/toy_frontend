@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
   leftDiv:{
     width: '50%',
-    borderRight: '1px solid #74BBE8FF'
+    borderRight: '5px solid #8b9dc3'
   },
   rightDiv:{
     width: '50%',
