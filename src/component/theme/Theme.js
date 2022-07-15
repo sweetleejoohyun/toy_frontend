@@ -30,6 +30,12 @@ function Theme(props) {
         color: '#f0f2f5',
       }
     },
+    objectBox:{
+      borderStyle: '1px solid #8b9dc3',
+      labelColor: '#0D275DFF',
+      labelSize: '16px',
+      labelWeight: 'bold',
+    },
 
   };
 
