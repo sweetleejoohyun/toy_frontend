@@ -14,7 +14,7 @@ function ObjectBox(props){
 
   return(
     <div className={classes.root}>
-      <div>
+      <div className={classes.imgDiv}>
         <img
           className={classes.img}
           // src={process.env.PUBLIC_URL +'/images/grapefruit.jpg'}
@@ -35,16 +35,27 @@ ObjectBox.prototype = {
 
 const useStyles = makeStyles(theme => ({
   root:{
-    width: theme.spacing(20),
-    backgroundColor: '#E0E0E0FF'
+    display: "inline-table",
+    width: theme.spacing(25),
+    height: theme.spacing(25),
+    border: theme.objectBox.borderStyle,
+  },
+  imgDiv:{
+    display: "flex",
+    justifyContent: "center",
+    height: theme.spacing(20),
+    borderBottom: theme.objectBox.borderStyle,
   },
   img:{
-    width: '100%',
-    height: '100%',
+    maxWidth: '100%',
+    maxHeight: '100%',
   },
   label:{
     display: "flex",
     justifyContent: "center",
+    color: theme.objectBox.labelColor,
+    fontSize: theme.objectBox.labelSize,
+    fontWeight: theme.objectBox.labelWeight,
   },
 }));
 
