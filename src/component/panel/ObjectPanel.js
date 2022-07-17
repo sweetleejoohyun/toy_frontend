@@ -7,14 +7,18 @@ import {
   TableContainer,
   TableRow
 } from "@material-ui/core";
+import PropTypes from "prop-types";
+
 import ObjectBox from "../box/ObjectBox";
 
 
-function ObjectPanel() {
+function ObjectPanel(props) {
+  const {objectArr} = props
   const classes = useStyles();
 
-  const temp = [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]
-  // const temp = [{},{},{},{}]
+  const isNotEmpty = (object) => {
+    return Object.keys(object).length !== 0;
+  }
 
   return (
     <div className={classes.root}>
@@ -22,11 +26,12 @@ function ObjectPanel() {
         <Table className={classes.table}>
           <TableBody>
             <TableRow className={classes.tableRow}>
-              {temp.map((item, index) => (
-                <TableCell key={index} className={classes.tableCell}>
-                  <ObjectBox />
-                </TableCell>
-              ))}
+              {objectArr.map((item, index) => (
+                isNotEmpty(item) && (
+                  <TableCell key={index} className={classes.tableCell}>
+                    <ObjectBox objectInfo={item} />
+                  </TableCell>
+                )))}
             </TableRow>
           </TableBody>
         </Table>
@@ -34,6 +39,10 @@ function ObjectPanel() {
 
     </div>
   )
+}
+
+ObjectPanel.prototype = {
+  objectArr: PropTypes.array.isRequired
 }
 
 const useStyles = makeStyles(theme => ({
@@ -59,6 +68,8 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(1),
     borderBottom: theme.spacing(0),
+    width: theme.spacing(25),
+    height: theme.spacing(25)
   }
 
 

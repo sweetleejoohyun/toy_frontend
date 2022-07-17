@@ -3,33 +3,39 @@ import {
   Collapse,
   makeStyles,
   Typography,
-  LinearProgress,
-  Box,
+  Select,
+  MenuItem,
+  Backdrop,
+  CircularProgress,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 import {
   imageExtension,
   imageTitle,
   messageNotImage,
   objectDetectionTitle,
-  imageBaseSize
+  imageBaseSize,
+  objectDetectionModels
 } from "../../common/Constant";
 import OpenFileButton from "../button/OpenFileButton";
 import appConfig, { getImage } from "../../common/AppConfig";
 import {onAxiosError} from "../../common/Error";
 
 
-function ImagePanel(){
+function ImagePanel(props){
+  const {setObjectArr} = props
   const classes = useStyles();
+  const [model, setModel] = useState(objectDetectionModels[0])
   const [openAlert, setOpenAlert] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState('');
   const [imagePath, setImagePath] = useState('');
-  const [displayProgress, setDisplayProgress] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [imgWidth, setImgWidth] = useState(0)
   const [imgHeight, setImgHeight] = useState(0)
+  const [backdrop, setBackdrop] = useState(false);
+
 
   const onChangeFile = event => {
     const file = event.target.files[0];
@@ -41,41 +47,58 @@ function ImagePanel(){
     } else {
       setSelectedFileName('')
       setImagePath('')
-      setProgress(0)
+      setObjectArr([])
       setOpenAlert(true)
     }
   };
 
   // upload image
   const uploadImage = (file) => {
-    setDisplayProgress(true);
+    setBackdrop(true)
     const formData = new FormData();
-    formData.append('file', file);
     formData.append('image', file);
 
     axios
       .post(appConfig.apiRoot + '/image/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
-        onUploadProgress: progressEvent => {
-          const { loaded, total } = progressEvent;
-          let percentage = Math.floor((loaded * 100) / total);
-          setProgress(percentage);
-        },
       })
       .then(response => {
         if (response.status === 200) {
           setSelectedFileName(file.name);
           setImagePath(response.data.path)
+          runObjectDetection(response.data.path)
           resizeImage(response.data.info)
         }
       })
       .catch(error => {
         setSelectedFileName('')
         setImagePath('')
-        setProgress(0)
+        setBackdrop(false)
         onAxiosError(error);
       })
   };
+
+  const runObjectDetection = (imagePath) => {
+    const data = {path: imagePath}
+    axios
+      .post(appConfig.apiRoot + '/image/object-detection/ssdmobilenetv2',
+        JSON.stringify(data),
+        {
+          headers: { 'Content-Type': 'application/json' },
+        })
+      .then(response => {
+        if (response.status === 200) {
+          // console.log(response.data.path)
+          setObjectArr(response.data.result)
+          setBackdrop(false)
+        }
+      })
+      .catch(error => {
+        setObjectArr([])
+        setBackdrop(false)
+        onAxiosError(error);
+      })
+  }
 
   const resizeImage = (imageInfo) => {
     const { height, width } = imageInfo;
@@ -85,10 +108,26 @@ function ImagePanel(){
     setImgHeight(ratio * height)
   }
 
+  const handleSelect = (event) => {
+    setModel(event.target.value)
+  };
+
   return(
     <div className={classes.root}>
       <div className={classes.topDiv}>
         <Typography className={classes.title}> {imageTitle}&nbsp;{objectDetectionTitle} </Typography>
+        <Select
+          className={classes.select}
+          name="model"
+          value={model}
+          onChange={handleSelect}
+        >
+          {objectDetectionModels.map((model, index) => {
+            return(
+              <MenuItem key={index} value={model}>{model}</MenuItem>
+            )
+          })}
+        </Select>
       </div>
       <div className={classes.fileDiv}>
         <div className={classes.uploadDiv}>
@@ -98,20 +137,6 @@ function ImagePanel(){
             accept={imageExtension}/>
           { selectedFileName?
             <Typography className={classes.filenameTypo}>{selectedFileName}</Typography> : null
-          }
-          { displayProgress?
-            <div className={classes.progressDiv}>
-              <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                <Box sx={{ width: '100%', mr: 1 }}>
-                  <LinearProgress variant="determinate" value={progress} />
-                </Box>
-                <Box sx={{ minWidth: 35 }}>
-                  <label className={classes.label}>
-                    {`${Math.round(progress)}%`}
-                  </label>
-                </Box>
-              </Box>
-            </div> : null
           }
         </div>
         <div>
@@ -129,10 +154,20 @@ function ImagePanel(){
             alt={'image'}/>
         )}
       </div>
+      <Backdrop
+        className={classes.backdrop}
+        open={backdrop}>
+        <CircularProgress
+          color="primary"
+          style={{ width: '100px', height: '100px' }}/>
+      </Backdrop>
     </div>
   )
 }
 
+ImagePanel.propTypes = {
+  setObjectArr: PropTypes.func.isRequired,
+};
 
 const useStyles = makeStyles(theme => ({
   topDiv:{
@@ -146,6 +181,11 @@ const useStyles = makeStyles(theme => ({
     fontFamily: theme.base.fontFamily,
     fontSize: theme.spacing(2.5),
     fontWeight: "bold",
+  },
+  select:{
+    minWidth: theme.spacing(25),
+    marginLeft: theme.spacing(5),
+    textAlign: "center",
   },
   fileDiv:{
     display: "block",
@@ -171,12 +211,8 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
-  progressDiv:{
-    marginLeft: theme.spacing(3),
-    width: '60%',
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+  backdrop:{
+    zIndex: theme.zIndex.drawer + 1,
   }
 }));
 
