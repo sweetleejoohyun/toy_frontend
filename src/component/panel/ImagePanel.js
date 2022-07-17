@@ -81,14 +81,13 @@ function ImagePanel(props){
   const runObjectDetection = (imagePath) => {
     const data = {path: imagePath}
     axios
-      .post(appConfig.apiRoot + '/image/object-detection/ssdmobilenetv2',
+      .post(appConfig.apiRoot + '/image/object-detection/' + model.toLowerCase(),
         JSON.stringify(data),
         {
           headers: { 'Content-Type': 'application/json' },
         })
       .then(response => {
         if (response.status === 200) {
-          // console.log(response.data.path)
           setObjectArr(response.data.result)
           setBackdrop(false)
         }
