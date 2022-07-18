@@ -88,7 +88,7 @@ function ImagePanel(props){
         })
       .then(response => {
         if (response.status === 200) {
-          setObjectArr(response.data.result)
+          setObjectArr(response.data.result[0])
           setBackdrop(false)
         }
       })
