@@ -176,7 +176,7 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(5),
   },
   title:{
-    color: theme.base.fontColor,
+    color: theme.title.color,
     fontFamily: theme.base.fontFamily,
     fontSize: theme.spacing(2.5),
     fontWeight: "bold",
