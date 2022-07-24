@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   },
   leftDiv:{
     width: '50%',
-    borderRight: '5px solid #8b9dc3'
+    borderRight: theme.panel.divider,
   },
   rightDiv:{
     width: '50%',
