@@ -7,17 +7,16 @@ function Theme(props) {
   const {children} = props;
 
   const base = {
-    mainButtonColor: '#8b9dc3',
+    mainButtonColor: '#68bd69',
     baseBackgroundColor: '#f0f2f5',
 
     headerHeight: '7vh',
-    headerColor: '#8b9dc3',
+    headerColor: '#68bd69',
 
     footerHeight: '3vh',
-    footerColor: '#8b9dc3',
-
-    fontFamily: 'sans-serif',
-    fontColor: '#0D275DFF',
+    footerColor: '#68bd69',
+    // fontFamily: 'sans-serif',
+    fontColor: '#fff',
 
     color: '#3b5998',
     hoverButtonColor: '#c5cfe8',
@@ -36,6 +35,16 @@ function Theme(props) {
       labelSize: '16px',
       labelWeight: 'bold',
     },
+    panel:{
+      divider: '5px solid #68bd69',
+    },
+    title:{
+      color: '#051e0b',
+    },
+    menuButton:{
+      buttonColor: '#68bd69',
+      fontColor: '#fff',
+    }
 
   };
 
