@@ -18,7 +18,7 @@ import {
   messageNotImage,
   objectDetectionTitle,
   imageBaseSize,
-  objectDetectionModels
+  objectDetectionModels, modelName
 } from "../../common/Constant";
 import OpenFileButton from "../button/OpenFileButton";
 import appConfig, { getImage } from "../../common/AppConfig";
@@ -115,6 +115,7 @@ function ImagePanel(props){
     <div className={classes.root}>
       <div className={classes.topDiv}>
         <Typography className={classes.title}> {imageTitle}&nbsp;{objectDetectionTitle} </Typography>
+        <Typography className={classes.modelTitle}>{modelName}</Typography>
         <Select
           className={classes.select}
           name="model"
@@ -178,12 +179,17 @@ const useStyles = makeStyles(theme => ({
   title:{
     color: theme.title.color,
     fontFamily: theme.base.fontFamily,
-    fontSize: theme.spacing(2.5),
+    fontSize: theme.spacing(3),
     fontWeight: "bold",
+  },
+  modelTitle:{
+    color: theme.title.color,
+    fontSize: theme.spacing(2),
+    marginLeft: theme.spacing(5),
   },
   select:{
     minWidth: theme.spacing(25),
-    marginLeft: theme.spacing(5),
+    marginLeft: theme.spacing(1),
     textAlign: "center",
   },
   fileDiv:{

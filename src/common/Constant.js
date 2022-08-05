@@ -13,3 +13,5 @@ export const messageRestrictVideoSize = '영상의 크기는 2.0MB를 넘을 수
 export const imageBaseSize = 700;
 
 export const objectDetectionModels = ['SsdMobilenetV2'];
+
+export const modelName = '모델명'
