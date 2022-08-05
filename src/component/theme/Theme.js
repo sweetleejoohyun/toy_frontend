@@ -30,8 +30,8 @@ function Theme(props) {
       }
     },
     objectBox:{
-      borderStyle: '1px solid #8b9dc3',
-      labelColor: '#0D275DFF',
+      borderStyle: '1px solid #051e0b',
+      labelColor: '#051e0b',
       labelSize: '16px',
       labelWeight: 'bold',
     },
