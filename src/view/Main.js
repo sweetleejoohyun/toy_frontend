@@ -58,15 +58,18 @@ const useStyles = makeStyles(theme => ({
   },
   button:{
     backgroundColor: theme.base.mainButtonColor,
-    width: '60vh',
-    height: '60vh',
+    width: '40vh',
+    height: '40vh',
     margin: '0 20px',
+    "&:hover":{
+      backgroundColor: 'red',
+    }
   },
   typography:{
     fontFamily: theme.base.fontFamily,
     fontWeight: "bold",
     fontSize: theme.spacing(10),
-    color: theme.base.color,
+    color: theme.base.baseBackgroundColor,
   }
 }))
 
