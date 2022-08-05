@@ -1,17 +1,21 @@
-import React, { useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {makeStyles} from "@material-ui/core";
-import {PlayArrowRounded, Pause, } from '@material-ui/icons';
+import {PlayArrowRounded, Pause, Stop } from '@material-ui/icons';
 
 import UseVideoPlayer from "./hooks/useVideoPlayer";
+import {getVideo} from "../../common/AppConfig";
 
 
-function VideoPlayer(){
+function VideoPlayer(props){
+  const {videoPath} = props;
   const classes = useStyles();
   const videoElement = useRef(null);
   const [duration, setDuration] = useState('00:00')
+  const [isVideoPlay, setIsVideoPlay] = useState(false)
   const {
     playerState,
     togglePlay,
+    toggleStop,
     handleOnTimeUpdate,
     handleVideoProgress,
     handleVideoSpeed,
@@ -24,12 +28,20 @@ function VideoPlayer(){
     setDuration(duration)
   };
 
+  useEffect(() => {
+    if (playerState.progress === 100){
+      setIsVideoPlay(false)
+    }else{
+      setIsVideoPlay(playerState.isPlaying)
+    }
+  }, [playerState.progress]);
+
   return(
     <div className={classes.root}>
       <div className={classes.videoWrapper}>
         <video
           className={classes.video}
-          src={process.env.PUBLIC_URL +'/videos/test.mp4'}
+          src={getVideo(videoPath)}
           ref={videoElement}
           onTimeUpdate={handleOnTimeUpdate}
           onLoadedMetadata={onloadVideo}
@@ -39,11 +51,14 @@ function VideoPlayer(){
         <div className={classes.controls}>
           <div className={classes.actions}>
             <button onClick={togglePlay}>
-              {!playerState.isPlaying ? (
+              {!isVideoPlay ? (
                 <PlayArrowRounded className={classes.playIcon} />
-              ) : (
+              ):(
                 <Pause className={classes.pauseIcon} />
               )}
+            </button>
+            <button onClick={toggleStop}>
+              <Stop className={classes.playIcon} />
             </button>
           </div>
           <input
@@ -98,8 +113,6 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center",
   },
   actions: {
-    background: "pink",
-
     "& button": {
       background: "none",
       border: "none",
