@@ -17,7 +17,7 @@ import {
   messageNotVideo,
   objectDetectionTitle,
   messageRestrictVideoSize,
-  objectDetectionModels,
+  objectDetectionModels, modelName,
 } from "../../common/Constant";
 import VideoPlayer from "../player/VideoPlayer";
 import OpenFileButton from "../button/OpenFileButton";
@@ -33,8 +33,6 @@ function VideoPanel(props){
   const [alertMsg, setAlertMsg] = useState('');
   const [selectedFileName, setSelectedFileName] = useState('');
   const [videoPath, setVideoPath] = useState('');
-  const [videoWidth, setVideoWidth] = useState(0)
-  const [videoHeight, setVideoHeight] = useState(0)
   const [backdrop, setBackdrop] = useState(false);
 
   const onChangeFile = event => {
@@ -93,7 +91,6 @@ function VideoPanel(props){
         })
       .then(response => {
         if (response.status === 200) {
-          setObjectArr(response.data.result[0])
           setBackdrop(false)
         }
       })
@@ -112,6 +109,7 @@ function VideoPanel(props){
     <div className={classes.root}>
       <div className={classes.topDiv}>
         <Typography className={classes.title}> {videoTitle}&nbsp;{objectDetectionTitle} </Typography>
+        <Typography className={classes.modelTitle}>{modelName}</Typography>
         <Select
           className={classes.select}
           name="model"
@@ -146,8 +144,9 @@ function VideoPanel(props){
         </div>
       </div>
       <div className={classes.videoDiv}>
-        {selectedFileName && (
-          <VideoPlayer />
+        {videoPath && (
+          <VideoPlayer
+            videoPath={videoPath}/>
         )}
       </div>
       <Backdrop
@@ -172,12 +171,17 @@ const useStyles = makeStyles(theme => ({
   title:{
     color: theme.title.color,
     fontFamily: theme.base.fontFamily,
-    fontSize: theme.spacing(2.5),
+    fontSize: theme.spacing(3),
     fontWeight: "bold",
+  },
+  modelTitle:{
+    color: theme.title.color,
+    fontSize: theme.spacing(2),
+    marginLeft: theme.spacing(5),
   },
   select:{
     minWidth: theme.spacing(25),
-    marginLeft: theme.spacing(5),
+    marginLeft: theme.spacing(1),
     textAlign: "center",
   },
   fileDiv:{
