@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   Backdrop,
   CircularProgress,
@@ -33,7 +33,16 @@ function VideoPanel(props){
   const [alertMsg, setAlertMsg] = useState('');
   const [selectedFileName, setSelectedFileName] = useState('');
   const [videoPath, setVideoPath] = useState('');
+  const [fps, setFps] = useState(0);
+  const [frameNo, setFrameNo] = useState(-1);
+  const [allResult, setAllResult] = useState([]);
   const [backdrop, setBackdrop] = useState(false);
+
+  useEffect(() => {
+    if(frameNo > 0) {
+      setObjectArr(allResult[frameNo])
+    }
+  }, [frameNo])
 
   const onChangeFile = event => {
     const file = event.target.files[0]
@@ -92,11 +101,14 @@ function VideoPanel(props){
       .then(response => {
         if (response.status === 200) {
           setBackdrop(false)
+          setAllResult(response.data.result)
+          setFps(response.data.fps)
         }
       })
       .catch(error => {
         setObjectArr([])
         setBackdrop(false)
+        setFps(0)
         onAxiosError(error);
       })
   }
@@ -146,7 +158,11 @@ function VideoPanel(props){
       <div className={classes.videoDiv}>
         {videoPath && (
           <VideoPlayer
-            videoPath={videoPath}/>
+            videoPath={videoPath}
+            fps={fps}
+            setFrameNo={setFrameNo}
+            setObjectArr={setObjectArr}
+          />
         )}
       </div>
       <Backdrop

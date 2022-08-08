@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 
 
-const UseVideoPlayer = (videoElement) => {
+const UseVideoPlayer = (videoElement, fps, setObjectArr) => {
   const [playerState, setPlayerState] = useState({
     isPlaying: false,
     progress: 0,
     speed: 1,
     currentTime: '00:00',
+    frameNo: 0,
   });
 
   useEffect(() => {
@@ -23,6 +24,7 @@ const UseVideoPlayer = (videoElement) => {
   };
 
   const toggleStop = () => {
+    setObjectArr([])
     videoElement.current.currentTime = 0
     setPlayerState({
       ...playerState,
@@ -36,10 +38,13 @@ const UseVideoPlayer = (videoElement) => {
     const minutes = String(Math.floor(videoElement.current.currentTime / 60));
     const seconds = String(Math.floor(videoElement.current.currentTime % 60));
     const currentTime = minutes.padStart(2, '0') + ':' + seconds.padStart(2, '0');
+    const frameNo = Math.round(videoElement.current.currentTime * fps)-1;
+
     setPlayerState({
       ...playerState,
       progress: progress,
       currentTime: currentTime,
+      frameNo: frameNo
     })
   };
 

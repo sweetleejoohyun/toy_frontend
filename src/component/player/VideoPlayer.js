@@ -7,7 +7,7 @@ import {getVideo} from "../../common/AppConfig";
 
 
 function VideoPlayer(props){
-  const {videoPath} = props;
+  const {videoPath, fps, setFrameNo, setObjectArr} = props;
   const classes = useStyles();
   const videoElement = useRef(null);
   const [duration, setDuration] = useState('00:00')
@@ -19,7 +19,7 @@ function VideoPlayer(props){
     handleOnTimeUpdate,
     handleVideoProgress,
     handleVideoSpeed,
-  } = UseVideoPlayer(videoElement);
+  } = UseVideoPlayer(videoElement, fps, setObjectArr);
 
   const onloadVideo = () => {
     const minutes = String(Math.floor(videoElement.current.duration / 60));
@@ -36,9 +36,13 @@ function VideoPlayer(props){
     }
   }, [playerState.progress]);
 
+  useEffect(() => {
+    setFrameNo(playerState.frameNo)
+  }, [playerState.frameNo])
+
   return(
     <div className={classes.root}>
-      <div className={classes.videoWrapper}>
+      <div>
         <video
           className={classes.video}
           src={getVideo(videoPath)}
@@ -52,13 +56,13 @@ function VideoPlayer(props){
           <div className={classes.actions}>
             <button onClick={togglePlay}>
               {!isVideoPlay ? (
-                <PlayArrowRounded className={classes.playIcon} />
+                <PlayArrowRounded />
               ):(
-                <Pause className={classes.pauseIcon} />
+                <Pause />
               )}
             </button>
             <button onClick={toggleStop}>
-              <Stop className={classes.playIcon} />
+              <Stop />
             </button>
           </div>
           <input
@@ -89,23 +93,10 @@ function VideoPlayer(props){
 }
 
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root:{
-    // backgroundColor: '#EEEEEE'
     display: "flex",
     justifyContent: "center",
-  },
-  videoWrapper: {
-    // width: '100%',
-    // position: 'relative',
-    // display: 'flex',
-    // justifyContent: 'center',
-    // overflow: 'hidden',
-    // borderRadius: '10px',
-
-    // '&:hover': {
-    //   backgroundColor: 'transparent',
-    // },
   },
   controls:{
     display: "flex",
@@ -126,10 +117,6 @@ const useStyles = makeStyles(theme => ({
   videoProgress:{
     width: '70%'
   },
-  playIcon:{
-  }
-
-
 }));
 
 
