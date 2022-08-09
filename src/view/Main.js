@@ -25,6 +25,14 @@ function Main(){
 
   return(
     <div className={classes.root}>
+      <div className={classes.titleDiv}>
+        <div className={classes.imgDiv}>
+          <img src={process.env.PUBLIC_URL +'/images/tensorflowhub.png'} alt={"tensorflowhub"} />
+        </div>
+        <div className={classes.labelDiv}>
+          <Typography className={classes.title}>Tensorflow hub에 있는 모델을 이용하여<br /> 이미지분석과 영상분석을 합니다.</Typography>
+        </div>
+      </div>
       <div className={classes.box}>
         <Button
           className={classes.button}
@@ -50,11 +58,27 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.base.baseBackgroundColor,
     height: '100vh',
   },
+  titleDiv:{
+    height: '35%',
+  },
+  imgDiv:{
+    display: "flex",
+    justifyContent: "center",
+    height: theme.spacing(20),
+  },
+  labelDiv:{
+    display: "flex",
+    justifyContent: "center",
+    height: theme.spacing(20),
+  },
+  title:{
+    color: theme.base.mainButtonColor,
+    fontSize: theme.spacing(4)
+  },
   box:{
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
-    height: '100%',
+    height: '65%',
   },
   button:{
     backgroundColor: theme.base.mainButtonColor,
@@ -62,7 +86,7 @@ const useStyles = makeStyles(theme => ({
     height: '40vh',
     margin: '0 20px',
     "&:hover":{
-      backgroundColor: 'red',
+      backgroundColor: '#fbbb37',
     }
   },
   typography:{

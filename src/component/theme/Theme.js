@@ -8,17 +8,15 @@ function Theme(props) {
 
   const base = {
     mainButtonColor: '#68bd69',
-    baseBackgroundColor: '#f0f2f5',
+    baseBackgroundColor: '#ffffff',
 
     headerHeight: '7vh',
     headerColor: '#68bd69',
 
     footerHeight: '3vh',
     footerColor: '#68bd69',
-    // fontFamily: 'sans-serif',
     fontColor: '#fff',
 
-    color: '#3b5998',
     hoverButtonColor: '#c5cfe8',
   };
 
