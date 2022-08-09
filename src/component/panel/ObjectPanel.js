@@ -26,12 +26,14 @@ function ObjectPanel(props) {
         <Table className={classes.table}>
           <TableBody>
             <TableRow className={classes.tableRow}>
-              {objectArr.map((item, index) => (
-                isNotEmpty(item) && (
-                  <TableCell key={index} className={classes.tableCell}>
-                    <ObjectBox objectInfo={item} />
-                  </TableCell>
-                )))}
+              { isNotEmpty(objectArr) &&
+                  objectArr.map((item, index) => (
+                    isNotEmpty(item) && (
+                      <TableCell key={index} className={classes.tableCell}>
+                        <ObjectBox objectInfo={item} />
+                      </TableCell>
+                    )))
+              }
             </TableRow>
           </TableBody>
         </Table>

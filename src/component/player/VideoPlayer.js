@@ -1,21 +1,25 @@
-import React, { useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {makeStyles} from "@material-ui/core";
-import {PlayArrowRounded, Pause, } from '@material-ui/icons';
+import {PlayArrowRounded, Pause, Stop } from '@material-ui/icons';
 
 import UseVideoPlayer from "./hooks/useVideoPlayer";
+import {getVideo} from "../../common/AppConfig";
 
 
-function VideoPlayer(){
+function VideoPlayer(props){
+  const {videoPath, fps, setFrameNo, setObjectArr} = props;
   const classes = useStyles();
   const videoElement = useRef(null);
   const [duration, setDuration] = useState('00:00')
+  const [isVideoPlay, setIsVideoPlay] = useState(false)
   const {
     playerState,
     togglePlay,
+    toggleStop,
     handleOnTimeUpdate,
     handleVideoProgress,
     handleVideoSpeed,
-  } = UseVideoPlayer(videoElement);
+  } = UseVideoPlayer(videoElement, fps, setObjectArr);
 
   const onloadVideo = () => {
     const minutes = String(Math.floor(videoElement.current.duration / 60));
@@ -24,12 +28,24 @@ function VideoPlayer(){
     setDuration(duration)
   };
 
+  useEffect(() => {
+    if (playerState.progress === 100){
+      setIsVideoPlay(false)
+    }else{
+      setIsVideoPlay(playerState.isPlaying)
+    }
+  }, [playerState.progress]);
+
+  useEffect(() => {
+    setFrameNo(playerState.frameNo)
+  }, [playerState.frameNo])
+
   return(
     <div className={classes.root}>
-      <div className={classes.videoWrapper}>
+      <div>
         <video
           className={classes.video}
-          src={process.env.PUBLIC_URL +'/videos/test.mp4'}
+          src={getVideo(videoPath)}
           ref={videoElement}
           onTimeUpdate={handleOnTimeUpdate}
           onLoadedMetadata={onloadVideo}
@@ -39,11 +55,14 @@ function VideoPlayer(){
         <div className={classes.controls}>
           <div className={classes.actions}>
             <button onClick={togglePlay}>
-              {!playerState.isPlaying ? (
-                <PlayArrowRounded className={classes.playIcon} />
-              ) : (
-                <Pause className={classes.pauseIcon} />
+              {!isVideoPlay ? (
+                <PlayArrowRounded />
+              ):(
+                <Pause />
               )}
+            </button>
+            <button onClick={toggleStop}>
+              <Stop />
             </button>
           </div>
           <input
@@ -54,9 +73,11 @@ function VideoPlayer(){
             value={playerState.progress}
             onChange={(e) => handleVideoProgress(e)}
           />
-          <label>{playerState.currentTime}</label>
-          <label>{'/'}</label>
-          <label>{duration}</label>
+          <div>
+            <label>{playerState.currentTime}</label>
+            <label className={classes.timeLabel}>{'/'}</label>
+            <label>{duration}</label>
+          </div>
           <select
             value={playerState.speed}
             onChange={(e) => handleVideoSpeed(e)}
@@ -74,32 +95,17 @@ function VideoPlayer(){
 }
 
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root:{
-    // backgroundColor: '#EEEEEE'
     display: "flex",
     justifyContent: "center",
   },
-  videoWrapper: {
-    // width: '100%',
-    // position: 'relative',
-    // display: 'flex',
-    // justifyContent: 'center',
-    // overflow: 'hidden',
-    // borderRadius: '10px',
-
-    // '&:hover': {
-    //   backgroundColor: 'transparent',
-    // },
-  },
   controls:{
     display: "flex",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     alignItems: "center",
   },
   actions: {
-    background: "pink",
-
     "& button": {
       background: "none",
       border: "none",
@@ -111,12 +117,12 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   videoProgress:{
-    width: '70%'
+    width: '50%'
   },
-  playIcon:{
-  }
-
-
+  timeLabel:{
+    marginLeft: theme.spacing(0.5),
+    marginRight: theme.spacing(0.5),
+  },
 }));
 
 

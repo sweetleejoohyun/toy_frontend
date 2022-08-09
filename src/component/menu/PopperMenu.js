@@ -89,11 +89,11 @@ const useStyles = makeStyles(theme => ({
     fontWeight: "bolder"
   },
   menuList: {
-    backgroundColor: theme.base.headerColor,
+    backgroundColor: theme.menuButton.buttonColor,
     width: theme.spacing(15)
   },
   menuItem: {
-    color: theme.base.fontColor,
+    color: theme.menuButton.fontColor,
     justifyContent: "center"
   }
 }))

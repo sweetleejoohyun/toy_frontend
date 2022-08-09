@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
-  Box,
-  Collapse, LinearProgress,
+  Backdrop,
+  CircularProgress,
+  Collapse,
   makeStyles,
+  MenuItem,
+  Select,
   Typography
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
@@ -14,6 +17,7 @@ import {
   messageNotVideo,
   objectDetectionTitle,
   messageRestrictVideoSize,
+  objectDetectionModels, modelName,
 } from "../../common/Constant";
 import VideoPlayer from "../player/VideoPlayer";
 import OpenFileButton from "../button/OpenFileButton";
@@ -21,13 +25,24 @@ import appConfig from "../../common/AppConfig";
 import {onAxiosError} from "../../common/Error";
 
 
-function VideoPanel(){
+function VideoPanel(props){
+  const {setObjectArr} = props
   const classes = useStyles();
+  const [model, setModel] = useState(objectDetectionModels[0])
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
-  const [selectedFile, setSelectedFile] = useState();
-  const [displayProgress, setDisplayProgress] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [selectedFileName, setSelectedFileName] = useState('');
+  const [videoPath, setVideoPath] = useState('');
+  const [fps, setFps] = useState(0);
+  const [frameNo, setFrameNo] = useState(-1);
+  const [allResult, setAllResult] = useState([]);
+  const [backdrop, setBackdrop] = useState(false);
+
+  useEffect(() => {
+    if(frameNo > 0) {
+      setObjectArr(allResult[frameNo])
+    }
+  }, [frameNo])
 
   const onChangeFile = event => {
     const file = event.target.files[0]
@@ -35,7 +50,7 @@ function VideoPanel(){
     // check file size
     if (file.size > 2097152) {
       setAlertMsg(messageRestrictVideoSize)
-      setSelectedFile()
+      setSelectedFileName('')
       setOpenAlert(true)
     } else {
       // check the extension
@@ -44,7 +59,7 @@ function VideoPanel(){
         uploadVideo(file)
       } else {
         setAlertMsg(messageNotVideo)
-        setSelectedFile()
+        setSelectedFileName('')
         setOpenAlert(true)
       }
     }
@@ -52,39 +67,73 @@ function VideoPanel(){
 
   // upload video
   const uploadVideo = (file) => {
-    setDisplayProgress(true);
+    setBackdrop(true)
     const formData = new FormData();
-    formData.append('file', file);
     formData.append('video', file);
 
     axios
       .post(appConfig.apiRoot + '/video/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
-        onUploadProgress: progressEvent => {
-          const { loaded, total } = progressEvent;
-          let percentage = Math.floor((loaded * 100) / total);
-          setProgress(percentage);
-        },
       })
       .then(response => {
         if (response.status === 200) {
-          console.log(response.data.message)
-          setSelectedFile(file);
+          setSelectedFileName(file.name);
+          setVideoPath(response.data.path)
+          runObjectDetection(response.data.path)
         }
       })
       .catch(error => {
-        setSelectedFile()
+        setSelectedFileName('')
+        setVideoPath('')
+        setBackdrop(false)
         onAxiosError(error);
       })
-      .finally( () => {
-        // setDisplayProgress(false)
+  };
+
+  const runObjectDetection = (imagePath) => {
+    const data = {path: imagePath}
+    axios
+      .post(appConfig.apiRoot + '/video/object-detection/' + model.toLowerCase(),
+        JSON.stringify(data),
+        {
+          headers: { 'Content-Type': 'application/json' },
+        })
+      .then(response => {
+        if (response.status === 200) {
+          setBackdrop(false)
+          setAllResult(response.data.result)
+          setFps(response.data.fps)
+        }
       })
+      .catch(error => {
+        setObjectArr([])
+        setBackdrop(false)
+        setFps(0)
+        onAxiosError(error);
+      })
+  }
+
+  const handleSelect = (event) => {
+    setModel(event.target.value)
   };
 
   return(
     <div className={classes.root}>
       <div className={classes.topDiv}>
         <Typography className={classes.title}> {videoTitle}&nbsp;{objectDetectionTitle} </Typography>
+        <Typography className={classes.modelTitle}>{modelName}</Typography>
+        <Select
+          className={classes.select}
+          name="model"
+          value={model}
+          onChange={handleSelect}
+        >
+          {objectDetectionModels.map((model, index) => {
+            return(
+              <MenuItem key={index} value={model}>{model}</MenuItem>
+            )
+          })}
+        </Select>
       </div>
       <div className={classes.fileDiv}>
         <div className={classes.fileTitle}>
@@ -93,22 +142,8 @@ function VideoPanel(){
             onChangeFile={onChangeFile}
             accept={videoExtension}/>
 
-          { selectedFile?
-            <Typography className={classes.filenameTypo}>{selectedFile.name}</Typography> : null
-          }
-          { displayProgress?
-            <div className={classes.progressDiv}>
-              <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                <Box sx={{ width: '100%', mr: 1 }}>
-                  <LinearProgress variant="determinate" value={progress} />
-                </Box>
-                <Box sx={{ minWidth: 35 }}>
-                  <label className={classes.label}>
-                    {`${Math.round(progress)}%`}
-                  </label>
-                </Box>
-              </Box>
-            </div> : null
+          { selectedFileName?
+            <Typography className={classes.filenameTypo}>{selectedFileName}</Typography> : null
           }
         </div>
         <div>
@@ -121,19 +156,28 @@ function VideoPanel(){
         </div>
       </div>
       <div className={classes.videoDiv}>
-        {selectedFile && (
-          <VideoPlayer />
+        {videoPath && (
+          <VideoPlayer
+            videoPath={videoPath}
+            fps={fps}
+            setFrameNo={setFrameNo}
+            setObjectArr={setObjectArr}
+          />
         )}
       </div>
+      <Backdrop
+        className={classes.backdrop}
+        open={backdrop}>
+        <CircularProgress
+          color="primary"
+          style={{ width: '100px', height: '100px' }}/>
+      </Backdrop>
     </div>
   )
 }
 
 
 const useStyles = makeStyles(theme => ({
-  root:{
-    height: '100%',
-  },
   topDiv:{
     display: "flex",
     alignItems: "center",
@@ -141,12 +185,23 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(5),
   },
   title:{
+    color: theme.title.color,
     fontFamily: theme.base.fontFamily,
-    fontSize: theme.spacing(2.5),
+    fontSize: theme.spacing(3),
     fontWeight: "bold",
   },
+  modelTitle:{
+    color: theme.title.color,
+    fontSize: theme.spacing(2),
+    marginLeft: theme.spacing(5),
+  },
+  select:{
+    minWidth: theme.spacing(25),
+    marginLeft: theme.spacing(1),
+    textAlign: "center",
+  },
   fileDiv:{
-    display: "flow-root",
+    display: "block",
     alignItems: "center",
     marginTop: theme.spacing(2),
     marginLeft: theme.spacing(5),
@@ -165,21 +220,16 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(1),
   },
   videoDiv:{
-    // width: '50vw',
+    width: '100%',
     height: '70vh',
     display: 'flex',
     justifyContent: "center",
-    marginLeft: theme.spacing(1),
+    alignItems: "center",
     marginTop: theme.spacing(2),
-    marginRight: theme.spacing(1),
     marginBottom: theme.spacing(2),
   },
-  progressDiv:{
-    marginLeft: theme.spacing(3),
-    width: '60%',
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+  backdrop:{
+    zIndex: theme.zIndex.drawer + 1,
   }
 }));
 

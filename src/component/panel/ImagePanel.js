@@ -18,7 +18,7 @@ import {
   messageNotImage,
   objectDetectionTitle,
   imageBaseSize,
-  objectDetectionModels
+  objectDetectionModels, modelName
 } from "../../common/Constant";
 import OpenFileButton from "../button/OpenFileButton";
 import appConfig, { getImage } from "../../common/AppConfig";
@@ -81,15 +81,14 @@ function ImagePanel(props){
   const runObjectDetection = (imagePath) => {
     const data = {path: imagePath}
     axios
-      .post(appConfig.apiRoot + '/image/object-detection/ssdmobilenetv2',
+      .post(appConfig.apiRoot + '/image/object-detection/' + model.toLowerCase(),
         JSON.stringify(data),
         {
           headers: { 'Content-Type': 'application/json' },
         })
       .then(response => {
         if (response.status === 200) {
-          // console.log(response.data.path)
-          setObjectArr(response.data.result)
+          setObjectArr(response.data.result[0])
           setBackdrop(false)
         }
       })
@@ -116,6 +115,7 @@ function ImagePanel(props){
     <div className={classes.root}>
       <div className={classes.topDiv}>
         <Typography className={classes.title}> {imageTitle}&nbsp;{objectDetectionTitle} </Typography>
+        <Typography className={classes.modelTitle}>{modelName}</Typography>
         <Select
           className={classes.select}
           name="model"
@@ -177,14 +177,19 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(5),
   },
   title:{
-    color: theme.base.fontColor,
+    color: theme.title.color,
     fontFamily: theme.base.fontFamily,
-    fontSize: theme.spacing(2.5),
+    fontSize: theme.spacing(3),
     fontWeight: "bold",
+  },
+  modelTitle:{
+    color: theme.title.color,
+    fontSize: theme.spacing(2),
+    marginLeft: theme.spacing(5),
   },
   select:{
     minWidth: theme.spacing(25),
-    marginLeft: theme.spacing(5),
+    marginLeft: theme.spacing(1),
     textAlign: "center",
   },
   fileDiv:{

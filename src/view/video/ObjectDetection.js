@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import ObjectPanel from "../../component/panel/ObjectPanel";
 import VideoPanel from "../../component/panel/VideoPanel";
 import {makeStyles} from "@material-ui/core";
@@ -6,14 +6,15 @@ import {makeStyles} from "@material-ui/core";
 
 function VideoObjectDetection() {
   const classes = useStyles();
+  const [objectArr, setObjectArr] = useState([])
 
   return (
     <div className={classes.root}>
       <div className={classes.leftDiv}>
-        <VideoPanel />
+        <VideoPanel setObjectArr={setObjectArr} />
       </div>
       <div className={classes.rightDiv}>
-        <ObjectPanel />
+        <ObjectPanel objectArr={objectArr} />
       </div>
     </div>
   )
@@ -27,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   },
   leftDiv:{
     width: '50%',
-    borderRight: '1px solid #74BBE8FF'
+    borderRight: theme.panel.divider,
   },
   rightDiv:{
     width: '50%',
