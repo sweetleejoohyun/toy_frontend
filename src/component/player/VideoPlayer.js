@@ -73,9 +73,11 @@ function VideoPlayer(props){
             value={playerState.progress}
             onChange={(e) => handleVideoProgress(e)}
           />
-          <label>{playerState.currentTime}</label>
-          <label>{'/'}</label>
-          <label>{duration}</label>
+          <div>
+            <label>{playerState.currentTime}</label>
+            <label className={classes.timeLabel}>{'/'}</label>
+            <label>{duration}</label>
+          </div>
           <select
             value={playerState.speed}
             onChange={(e) => handleVideoSpeed(e)}
@@ -93,14 +95,14 @@ function VideoPlayer(props){
 }
 
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root:{
     display: "flex",
     justifyContent: "center",
   },
   controls:{
     display: "flex",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     alignItems: "center",
   },
   actions: {
@@ -115,7 +117,11 @@ const useStyles = makeStyles(() => ({
     width: '100%',
   },
   videoProgress:{
-    width: '70%'
+    width: '50%'
+  },
+  timeLabel:{
+    marginLeft: theme.spacing(0.5),
+    marginRight: theme.spacing(0.5),
   },
 }));
 

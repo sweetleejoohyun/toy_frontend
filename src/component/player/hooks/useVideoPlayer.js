@@ -40,6 +40,9 @@ const UseVideoPlayer = (videoElement, fps, setObjectArr) => {
     const currentTime = minutes.padStart(2, '0') + ':' + seconds.padStart(2, '0');
     const frameNo = Math.round(videoElement.current.currentTime * fps)-1;
 
+    if (progress === 100){
+      playerState.isPlaying = false
+    }
     setPlayerState({
       ...playerState,
       progress: progress,
@@ -54,6 +57,7 @@ const UseVideoPlayer = (videoElement, fps, setObjectArr) => {
     setPlayerState({
       ...playerState,
       progress: manualChange,
+      isPlaying: playerState.isPlaying,
     });
   };
 
